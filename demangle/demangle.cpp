@@ -44,19 +44,28 @@ int main(int argc, const char * argv[])
     int status = 0;
     __cxxabiv1::__cxa_demangle(mangled_name, buff, &length, &status);
 
+    int result = 0;
     switch (status)
     {
         case 0:
             std::cout << buff << std::endl;
-            return 0;
+            result = 0;
+            break;
         case -1:
             std::cout << "A memory allocation failiure occurred" << std::endl;
+            result = 1;
+            break;
         case -2:
             std::cout << mangled_name << " is not a valid name under the C++ ABI mangling rules" << std::endl;
+            result = 1;
+            break;
         case -3:
             std::cout << "Invalid argument" << std::endl;
+            result = 1;
+            break;
     }
 
-    return 1;
+    free(buff);
+    return result;
 }
 
